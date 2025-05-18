@@ -48,7 +48,7 @@ foreach ($img in $images) {
 }
 
 foreach ($vid in $videos) {
-  $html += "<div class='post'><video src='images/$vid' muted loop playsinline></video></div>`n"
+  $html += "<div class='post'><video src='images/$vid' muted loop playsinline autoplay></video></div>`n"
 }
 
 $html += @"
