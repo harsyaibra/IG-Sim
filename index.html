@@ -46,28 +46,20 @@
 <div class='post'><img src='images/post-8.jpg' /></div>
 <div class='post'><video src='images/post-9.mp4' muted loop playsinline autoplay></video></div>
 <script>
-  // Fix 100vh issue on mobile
-  function setVH() {
-    document.documentElement.style.setProperty('--vh', \\px\);
-  }
-  setVH();
-  window.addEventListener('resize', setVH);
+const videos = document.querySelectorAll('video');
 
-  // Handle video autoplay on scroll
-  const videos = document.querySelectorAll("video");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const vid = entry.target;
+    if (entry.isIntersecting) {
+      vid.play();
+    } else {
+      vid.pause();
+    }
+  });
+}, { threshold: 0.75 });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const vid = entry.target;
-      if (entry.isIntersecting) {
-        vid.play();
-      } else {
-        vid.pause();
-      }
-    });
-  }, { threshold: 0.75 });
-
-  videos.forEach(video => observer.observe(video));
+videos.forEach(video => observer.observe(video));
 </script>
 </body>
 </html>

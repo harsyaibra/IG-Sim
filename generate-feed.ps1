@@ -53,31 +53,24 @@ foreach ($vid in $videos) {
 
 $html += @"
 <script>
-  // Fix 100vh issue on mobile
-  function setVH() {
-    document.documentElement.style.setProperty('--vh', \`\${window.innerHeight * 0.01}px\`);
-  }
-  setVH();
-  window.addEventListener('resize', setVH);
+const videos = document.querySelectorAll('video');
 
-  // Handle video autoplay on scroll
-  const videos = document.querySelectorAll("video");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const vid = entry.target;
+    if (entry.isIntersecting) {
+      vid.play();
+    } else {
+      vid.pause();
+    }
+  });
+}, { threshold: 0.75 });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const vid = entry.target;
-      if (entry.isIntersecting) {
-        vid.play();
-      } else {
-        vid.pause();
-      }
-    });
-  }, { threshold: 0.75 });
-
-  videos.forEach(video => observer.observe(video));
+videos.forEach(video => observer.observe(video));
 </script>
 </body>
 </html>
 "@
+
 
 $html | Out-File "$PSScriptRoot/index.html" -Encoding utf8
