@@ -8,25 +8,34 @@ $html = @"
   <meta charset="UTF-8">
   <title>IG Sim</title>
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --vh: 1vh;
+    }
+
     body {
       margin: 0;
       scroll-snap-type: y mandatory;
       overflow-y: scroll;
-      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
       background: black;
     }
+
     .post {
       scroll-snap-align: start;
-      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
     img, video {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    video {
+      width: 100vw;
+      height: calc(var(--vh, 1vh) * 100);
+      object-fit: cover;
       display: block;
     }
   </style>
@@ -44,20 +53,28 @@ foreach ($vid in $videos) {
 
 $html += @"
 <script>
-const videos = document.querySelectorAll("video");
+  // Fix 100vh issue on mobile
+  function setVH() {
+    document.documentElement.style.setProperty('--vh', \`\${window.innerHeight * 0.01}px\`);
+  }
+  setVH();
+  window.addEventListener('resize', setVH);
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const vid = entry.target;
-    if (entry.isIntersecting) {
-      vid.play();
-    } else {
-      vid.pause();
-    }
-  });
-}, { threshold: 0.75 });
+  // Handle video autoplay on scroll
+  const videos = document.querySelectorAll("video");
 
-videos.forEach(video => observer.observe(video));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const vid = entry.target;
+      if (entry.isIntersecting) {
+        vid.play();
+      } else {
+        vid.pause();
+      }
+    });
+  }, { threshold: 0.75 });
+
+  videos.forEach(video => observer.observe(video));
 </script>
 </body>
 </html>
