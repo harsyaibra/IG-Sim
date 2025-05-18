@@ -1,37 +1,56 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IG Scroll Simulator</title>
+  <title>IG Sim</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background-color: #000;
-      color: #fff;
+      scroll-snap-type: y mandatory;
       overflow-y: scroll;
-      scroll-behavior: smooth;
+      height: 100vh;
+      background: black;
     }
     .post {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px 0;
-      border-bottom: 1px solid #333;
+      scroll-snap-align: start;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .post img {
-      width: 100%;
+    img, video {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    video {
       display: block;
-      border-radius: 10px;
     }
   </style>
 </head>
-<body>
-  <div class="post"><img src="images/post1.jpg" alt="Post 1"></div>
-  <div class="post"><img src="images/post2.jpg" alt="Post 2"></div>
-  <div class="post"><img src="images/post3.jpg" alt="Post 3"></div>
-  <div class="post"><img src="images/post4.jpg" alt="Post 4"></div>
+<body><div class='post'><img src='images/post-1.jpg' /></div>
+<div class='post'><img src='images/post-2.jpg' /></div>
+<div class='post'><img src='images/post-3.jpg' /></div>
+<div class='post'><img src='images/post-4.jpg' /></div>
+<div class='post'><img src='images/post-5.jpg' /></div>
+<div class='post'><img src='images/post-6.jpg' /></div>
+<div class='post'><img src='images/post-7.jpg' /></div>
+<div class='post'><img src='images/post-8.jpg' /></div>
+<div class='post'><video src='images/post-9.mp4' muted loop playsinline></video></div>
+<script>
+const videos = document.querySelectorAll("video");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const vid = entry.target;
+    if (entry.isIntersecting) {
+      vid.play();
+    } else {
+      vid.pause();
+    }
+  });
+}, { threshold: 0.75 });
+
+videos.forEach(video => observer.observe(video));
+</script>
 </body>
 </html>
